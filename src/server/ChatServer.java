@@ -1,5 +1,9 @@
 package server;
 
+import java.rmi.Remote;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Vector;
 import client.CommandsFromServer;
 
@@ -10,7 +14,7 @@ import client.CommandsFromServer;
  * In a second time, you will have multiple room server, each managed by its own ChatServer.
  * A ChatServerManager will then be responsible for creating new rooms are they are added. 
  */
-public class ChatServer implements ChatServerInterface {
+public class ChatServer implements ChatServerInterface, Remote {
 	
 	private String roomName;
 	private Vector<CommandsFromServer> registeredClients;

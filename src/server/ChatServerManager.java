@@ -1,5 +1,11 @@
 package server;
 
+import java.rmi.AccessException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Vector;
 
 
@@ -9,21 +15,35 @@ import java.util.Vector;
  * In a second time, you will modify this to allow creating new rooms and looking them up from the client.
  *
  */
-public class ChatServerManager implements ChatServerManagerInterface {
+public class ChatServerManager implements ChatServerManagerInterface, Remote {
 
 	private Vector<String> chatRoomsList;
 	
 	private Vector<ChatServer> chatRooms;
 	
+	private Registry registry;
+	
 	/**
 	 * Constructor of the ChatServerManager.
 	 * Must export its functionalities to be called from RMI by the client.
 	 */
+	
 	public ChatServerManager () {
 		
 		// initial: we create a single chat room and the corresponding ChatServer
 		chatRooms.add(new ChatServer("sports"));
 		chatRoomsList.add("sports");
+		
+		try {
+
+			ChatServer stub = (ChatServer)UnicastRemoteObject.exportObject(this,0);
+			registry = LocateRegistry.getRegistry();
+			registry.rebind("server", stub);
+		} catch (AccessException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		
 		/*
 		 * TODO register the server manager object as a "ChatServerManager" on the RMI registry
