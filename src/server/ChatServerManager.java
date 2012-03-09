@@ -29,14 +29,15 @@ public class ChatServerManager implements ChatServerManagerInterface, Remote {
 	 */
 	
 	public ChatServerManager () {
-		
+		chatRoomsList = new Vector<String>();
+		chatRooms = new Vector<ChatServer>();
 		// initial: we create a single chat room and the corresponding ChatServer
 		chatRooms.add(new ChatServer("sports"));
 		chatRoomsList.add("sports");
 		
 		try {
 
-			ChatServer stub = (ChatServer)UnicastRemoteObject.exportObject(this,0);
+			ChatServerInterface stub = (ChatServerInterface)UnicastRemoteObject.exportObject(this,0);
 			registry = LocateRegistry.getRegistry();
 			registry.rebind("server", stub);
 		} catch (AccessException e) {
@@ -69,6 +70,7 @@ public class ChatServerManager implements ChatServerManagerInterface, Remote {
 	
 	public static void main(String[] args) {
 		// TODO main method needs to be done.
+		ChatServerManager cm = new ChatServerManager();
 	}
 	
 }
