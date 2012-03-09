@@ -1,5 +1,6 @@
 package server;
 
+import java.rmi.Remote;
 import java.util.Vector;
 
 
@@ -13,7 +14,7 @@ import java.util.Vector;
  * - creating new rooms
  * (deletion of rooms not required)
  */
-public interface ChatServerManagerInterface {
+public interface ChatServerManagerInterface extends Remote{
 	
 	/**
 	 * @return the list of available chat rooms

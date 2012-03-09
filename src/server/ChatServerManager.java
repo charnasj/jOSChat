@@ -37,7 +37,7 @@ public class ChatServerManager implements ChatServerManagerInterface, Remote {
 		
 		try {
 
-			ChatServerInterface stub = (ChatServerInterface)UnicastRemoteObject.exportObject(this,0);
+			ChatServerManagerInterface stub = (ChatServerManagerInterface)UnicastRemoteObject.exportObject(this,0);
 			registry = LocateRegistry.getRegistry();
 			registry.rebind("server", stub);
 		} catch (AccessException e) {
@@ -69,8 +69,8 @@ public class ChatServerManager implements ChatServerManagerInterface, Remote {
 	}	
 	
 	public static void main(String[] args) {
-		// TODO main method needs to be done.
 		ChatServerManager cm = new ChatServerManager();
+		
 	}
 	
 }
