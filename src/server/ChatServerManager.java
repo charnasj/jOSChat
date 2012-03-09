@@ -67,4 +67,8 @@ public class ChatServerManager implements ChatServerManagerInterface, Remote {
 		return false;
 	}	
 	
+	public static void main(String[] args) {
+		// TODO main method needs to be done.
+	}
+	
 }
