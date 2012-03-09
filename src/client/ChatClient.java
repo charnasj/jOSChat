@@ -79,8 +79,15 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	}
 
 	public Vector<String> getChatRoomsList() {
-		Vector<String> ret = server.getRoomsList();
-		return ret;
+		Vector<String> ret;
+		try {
+			ret = server.getRoomsList();
+			return ret;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public boolean joinChatRoom(String roomName) {
@@ -108,7 +115,13 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	}
 
 	public boolean createNewRoom(String roomName) {
-		return server.createRoom(roomName);
+		try {
+			return server.createRoom(roomName);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/*

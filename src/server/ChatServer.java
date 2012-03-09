@@ -1,6 +1,8 @@
 package server;
 
+import java.net.MalformedURLException;
 import java.rmi.AccessException;
+import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -20,7 +22,6 @@ public class ChatServer implements ChatServerInterface {
 	
 	private String roomName;
 	private Vector<CommandsFromServer> registeredClients;
-	private Registry registry;
 	
 	/**
 	 * Constructor: initializes the chat room and register it to the RMI registry
@@ -31,12 +32,12 @@ public class ChatServer implements ChatServerInterface {
 		registeredClients = new Vector<CommandsFromServer>();
 		
 		try {
-			ChatServerInterface stub = (ChatServerInterface)UnicastRemoteObject.exportObject(this,0);
-			registry = LocateRegistry.getRegistry();
-			registry.rebind("room_" + roomName, stub);
+			Naming.rebind("room_" + roomName, (ChatServerInterface)this);
 		} catch (AccessException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 		
