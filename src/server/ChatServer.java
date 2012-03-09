@@ -1,6 +1,8 @@
 package server;
 
+import java.rmi.AccessException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,10 +16,11 @@ import client.CommandsFromServer;
  * In a second time, you will have multiple room server, each managed by its own ChatServer.
  * A ChatServerManager will then be responsible for creating new rooms are they are added. 
  */
-public class ChatServer implements ChatServerInterface, Remote {
+public class ChatServer implements ChatServerInterface{
 	
 	private String roomName;
 	private Vector<CommandsFromServer> registeredClients;
+	private Registry registry;
 	
 	/**
 	 * Constructor: initializes the chat room and register it to the RMI registry
@@ -26,6 +29,17 @@ public class ChatServer implements ChatServerInterface, Remote {
 	public ChatServer(String roomName){
 		this.roomName = roomName;
 		registeredClients = new Vector<CommandsFromServer>();
+		
+		try {
+
+			ChatServerInterface stub = (ChatServerInterface)UnicastRemoteObject.exportObject(this,0);
+			registry = LocateRegistry.getRegistry();
+			registry.rebind("server", stub);
+		} catch (AccessException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		
 		/*
 		 * TODO register the ChatServer to the RMI registry

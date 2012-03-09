@@ -15,7 +15,7 @@ import java.util.Vector;
  * In a second time, you will modify this to allow creating new rooms and looking them up from the client.
  *
  */
-public class ChatServerManager implements ChatServerManagerInterface, Remote {
+public class ChatServerManager implements ChatServerManagerInterface {
 
 	private Vector<String> chatRoomsList;
 	
@@ -36,8 +36,7 @@ public class ChatServerManager implements ChatServerManagerInterface, Remote {
 		chatRoomsList.add("sports");
 		
 		try {
-
-			ChatServerInterface stub = (ChatServerInterface)UnicastRemoteObject.exportObject(this,0);
+			ChatServerManagerInterface stub = (ChatServerManagerInterface)UnicastRemoteObject.exportObject(this,0);
 			registry = LocateRegistry.getRegistry();
 			registry.rebind("server", stub);
 		} catch (AccessException e) {
