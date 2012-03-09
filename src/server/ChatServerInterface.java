@@ -6,7 +6,7 @@ import client.CommandsFromServer;
 
 
 
-public interface ChatServerInterface extends Remote {
+public interface ChatServerInterface extends Remote{
 
 	/**
 	 * receives a message from a client and send it to all subscribed clients
