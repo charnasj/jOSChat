@@ -68,7 +68,6 @@ public class ChatServerManager implements ChatServerManagerInterface {
 	
 	public static void main(String[] args) {
 		ChatServerManager cm = new ChatServerManager();
-		
 	}
 	
 }
