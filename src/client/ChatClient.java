@@ -46,8 +46,6 @@ public class ChatClient implements CommandsFromWindow,CommandsFromServer {
 		this.window = window;
 		this.userName = userName;
 		
-		System.err.println("TODO: implement ChatClient constructor and connection to the server");
-		
 		try {
 			registry = LocateRegistry.getRegistry();
 		} catch (RemoteException e) {
@@ -79,14 +77,8 @@ public class ChatClient implements CommandsFromWindow,CommandsFromServer {
 	}
 
 	public Vector<String> getChatRoomsList() {
-		
-		System.err.println("TODO: getChatRoomsList is not implemented.");
-
-		/*
-		 * TODO implement the method to receive a list of available chat rooms from the server.
-		 */		
-		
-		return null;
+		Vector<String> ret = server.getRoomsList();
+		return ret;
 	}
 	
 	public boolean joinChatRoom(String roomName) {
