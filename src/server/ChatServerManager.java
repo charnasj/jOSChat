@@ -69,6 +69,11 @@ public class ChatServerManager implements ChatServerManagerInterface {
 	
 	public static void main(String[] args) {
 		// TODO main method needs to be done.
+		try {
+			LocateRegistry.createRegistry(1099);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		ChatServerManager cm = new ChatServerManager();
 	}
 	
