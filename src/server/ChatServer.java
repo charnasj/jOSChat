@@ -16,7 +16,7 @@ import client.CommandsFromServer;
  * In a second time, you will have multiple room server, each managed by its own ChatServer.
  * A ChatServerManager will then be responsible for creating new rooms are they are added. 
  */
-public class ChatServer implements ChatServerInterface{
+public class ChatServer implements ChatServerInterface {
 	
 	private String roomName;
 	private Vector<CommandsFromServer> registeredClients;
@@ -31,10 +31,9 @@ public class ChatServer implements ChatServerInterface{
 		registeredClients = new Vector<CommandsFromServer>();
 		
 		try {
-
 			ChatServerInterface stub = (ChatServerInterface)UnicastRemoteObject.exportObject(this,0);
 			registry = LocateRegistry.getRegistry();
-			registry.rebind("server", stub);
+			registry.rebind("room_" + roomName, stub);
 		} catch (AccessException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
