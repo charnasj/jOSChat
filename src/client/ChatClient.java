@@ -1,7 +1,13 @@
 package client;
 
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Vector;
+
+import server.ChatServerManagerInterface;
 
 
 public class ChatClient implements CommandsFromWindow,CommandsFromServer {
@@ -18,6 +24,21 @@ public class ChatClient implements CommandsFromWindow,CommandsFromServer {
 	private final CommandsToWindow window ;
 	
 	/**
+	 * The server name.
+	 * */
+	private final String serverLookUpName = "127.0.0.1";
+	
+	/**
+	 * Registry
+	 * */
+	private Registry registry;
+	
+	/**
+	 * The server remote interface.
+	 * */
+	private ChatServerManagerInterface server;
+	
+	/**
 	 * Constructor for the ChatClient. Must perform the connection to the server. If the connection is not successful, it must exit with an error.
 	 * @param window
 	 */
@@ -27,9 +48,20 @@ public class ChatClient implements CommandsFromWindow,CommandsFromServer {
 		
 		System.err.println("TODO: implement ChatClient constructor and connection to the server");
 		
-		/*
-		 * TODO implement constructor
-		 */
+		try {
+			registry = LocateRegistry.getRegistry();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			server = (ChatServerManagerInterface)registry.lookup(serverLookUpName);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	/*
