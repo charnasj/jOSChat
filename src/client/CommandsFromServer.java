@@ -1,5 +1,7 @@
 package client;
 
+import java.rmi.Remote;
+
 
 
 /**
@@ -7,7 +9,7 @@ package client;
  * This file must not be modified.
  */
 
-public interface CommandsFromServer{
+public interface CommandsFromServer extends Remote {
 	
 	
 	/**

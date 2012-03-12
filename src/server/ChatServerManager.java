@@ -1,8 +1,7 @@
 package server;
 
-import java.net.MalformedURLException;
+
 import java.rmi.AccessException;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -46,10 +45,6 @@ public class ChatServerManager implements ChatServerManagerInterface{
 			e.printStackTrace();
 		} 
 		
-		/*
-		 * TODO register the server manager object as a "ChatServerManager" on the RMI registry
-		 * so it can be called by clients.
-		 */
 		
 	}
 
@@ -58,14 +53,13 @@ public class ChatServerManager implements ChatServerManagerInterface{
 	}
 
 	public boolean createRoom(String roomName) {
+		if(chatRooms.contains(roomName)) {
+			return false;
+		}
+		chatRooms.add(new ChatServer(roomName));
+		chatRoomsList.add(roomName);
+		return true;
 		
-		System.err.println("server manager method createRoom not implemented.");
-		
-		/*
-		 * TODO add the code to create a new room
-		 */
-		
-		return false;
 	}	
 	
 	public static void main(String[] args) {

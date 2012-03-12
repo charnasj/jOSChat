@@ -10,6 +10,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Vector;
 import client.CommandsFromServer;
+import client.CommandsFromWindow;
 
 
 /**
@@ -41,36 +42,20 @@ public class ChatServer implements ChatServerInterface {
 			e.printStackTrace();
 		}
 		
-		/*
-		 * TODO register the ChatServer to the RMI registry
-		 */
 	}
 	
 	public void publish(String message, String publisher) {
-		
-		System.err.println("TODO: publish is not implemented");
-		
-		/*
-		 * TODO send the message to all registered clients
-		 */
+		for(CommandsFromServer c : registeredClients) {
+			c.receiveMsg(roomName, publisher + " : " + message);
+		}
 	}
 
 	public void register(CommandsFromServer client) {
-		
-		System.err.println("TODO: register is not implemented");
-		
-		/*
-		 * TODO register the client
-		 */
+		registeredClients.add(client);
 	}
 
 	public void unregister(CommandsFromServer client) {
-		
-		System.err.println("TODO: unregister is not implemented");
-		
-		/*
-		 * TODO unregister the client
-		 */
+		registeredClients.remove(client);
 	}
 	
 }

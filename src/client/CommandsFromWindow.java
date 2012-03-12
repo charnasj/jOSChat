@@ -1,5 +1,6 @@
 package client;
 
+import java.rmi.Remote;
 import java.util.Vector;
 
 
@@ -9,7 +10,7 @@ import java.util.Vector;
  * This file must not be modified.
  *  
  */
-public interface CommandsFromWindow {
+public interface CommandsFromWindow extends Remote{
 	
 	/**
 	 * ask the server to create a new room named roomName
