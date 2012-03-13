@@ -1,6 +1,7 @@
 package client;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 
 
@@ -19,7 +20,7 @@ public interface CommandsFromServer extends Remote {
 	 */
 	//it's is just a proxy for publish method of CommandsFromClient interface
 	//i.e. when Server call this receiveMsg method ChatClient call publish method of it's window to display this message
-	public void receiveMsg(String roomName, String message);
+	public void receiveMsg(String roomName, String message) throws RemoteException;
 }
 
 

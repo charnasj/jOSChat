@@ -1,6 +1,5 @@
 package client;
 
-import java.rmi.Remote;
 import java.util.Vector;
 
 
@@ -10,14 +9,14 @@ import java.util.Vector;
  * This file must not be modified.
  *  
  */
-public interface CommandsFromWindow extends Remote{
+public interface CommandsFromWindow{
 	
 	/**
 	 * ask the server to create a new room named roomName
 	 * @param roomName String 
 	 * @return true if success, false otherwise
 	 */
-	public boolean createNewRoom(String roomName);
+	public boolean createNewRoom(String roomName)  ;
 	
 	/**
 	 * Send a new message to the server to propagate to all clients

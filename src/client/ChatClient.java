@@ -1,9 +1,10 @@
 package client;
 
-import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -25,9 +26,14 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	private final CommandsToWindow window;
 
 	/**
+	 * The RMI registry
+	 */
+	private Registry registry;
+
+	/**
 	 * The server name.
 	 * */
-//	private final String serverLookUpName = "localhost";
+	// private final String serverLookUpName = "localhost";
 
 	/**
 	 * The server remote interface.
@@ -37,7 +43,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	/**
 	 * Vector of chatrooms client is currently in.
 	 * */
-	private Hashtable<String,ChatServerInterface> chatRooms;
+	private Hashtable<String, ChatServerInterface> chatRooms;
 	
 	/**
 	 * Constructor for the ChatClient. Must perform the connection to the
@@ -50,12 +56,14 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		this.userName = userName;
 		chatRooms = new Hashtable<String, ChatServerInterface>();
 		try {
-			server = (ChatServerManagerInterface) Naming.lookup("server");
+			registry = LocateRegistry.getRegistry();
+			server = (ChatServerManagerInterface) registry.lookup("server");
+			CommandsFromServer stub = (CommandsFromServer) UnicastRemoteObject
+					.exportObject(this, 0);
+			registry.rebind("user_" + userName, stub);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 
@@ -67,8 +75,12 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	 */
 
 	public void sendText(String roomName, String message) {
-		ChatServerInterface chatServer = chatRooms.get(roomName);
+		System.out.println("Trying to send message to server: " + roomName);
 		try {
+			ChatServerInterface chatServer = chatRooms.get(roomName);
+			if(chatServer.equals(null)) {
+				System.out.println("Houston we have a problem!");
+			}
 			chatServer.publish(message, userName);
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -88,9 +100,12 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 
 	public boolean joinChatRoom(String roomName) {
 		try {
-			ChatServerInterface chatServer = (ChatServerInterface) Naming.lookup("room_" + roomName);
-			chatServer.register((CommandsFromServer)this);
-			chatRooms.put(roomName,chatServer);
+			ChatServerInterface chatServer = (ChatServerInterface) registry
+					.lookup("room_" + roomName);
+			chatRooms.put(roomName, chatServer);
+			
+			chatServer.register((CommandsFromServer) registry.lookup("user_" + userName));
+			System.out.println("Joined room: " + roomName);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,7 +116,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	public boolean leaveChatRoom(String roomName) {
 		ChatServerInterface chatServer = chatRooms.get(roomName);
 		try {
-			chatServer.unregister((CommandsFromServer)this);
+			chatServer.unregister((CommandsFromServer) this);
 			chatRooms.remove(roomName);
 			return true;
 		} catch (Exception e) {
@@ -130,4 +145,8 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 
 	// This class does not contain a main method. You should launch the whole
 	// program by launching ChatClientWindow's main method.
+
+//	public static void main(String[] args) {
+//		new ChatClient(null, "test");
+//	}
 }

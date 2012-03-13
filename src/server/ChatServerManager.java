@@ -70,6 +70,7 @@ public class ChatServerManager implements ChatServerManagerInterface{
 			e.printStackTrace();
 		}
 		ChatServerManager cm = new ChatServerManager();
+		System.out.println("ChatServerManager running successfully...");
 	}
 	
 }
