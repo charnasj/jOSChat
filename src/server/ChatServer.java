@@ -43,6 +43,7 @@ public class ChatServer implements ChatServerInterface {
 	}
 	
 	public void publish(String message, String publisher) {
+		System.out.println("Message received from: " + publisher);
 		for(CommandsFromServer c : registeredClients) {
 			try {
 				c.receiveMsg(roomName, publisher + " : " + message);
