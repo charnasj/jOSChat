@@ -1,12 +1,9 @@
 package client;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -35,7 +32,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	/**
 	 * The server name.
 	 * */
-	 private final String serverLookUpName = "130.125.12.229";;
+	 private final String serverLookUpName = "130.125.12.229";
 
 	/**
 	 * The server remote interface.
@@ -60,9 +57,6 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		try {
 			registry = LocateRegistry.getRegistry(serverLookUpName, 1099);
 			server = (ChatServerManagerInterface) registry.lookup("server");
-			CommandsFromServer stub = (CommandsFromServer) UnicastRemoteObject
-					.exportObject(this, 0);
-			registry.rebind("user_" + userName, stub);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
@@ -106,7 +100,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 					.lookup("room_" + roomName);
 			chatRooms.put(roomName, chatServer);
 			
-			chatServer.register((CommandsFromServer) registry.lookup("user_" + userName));
+			chatServer.register((CommandsFromServer) this);
 			System.out.println("Joined room: " + roomName);
 			return true;
 		} catch (Exception e) {
@@ -143,6 +137,11 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 
 	public void receiveMsg(String roomName, String message) {
 		window.publish(roomName, message);
+	}
+
+	@Override
+	public String getName() {
+		return userName;
 	}
 
 	// This class does not contain a main method. You should launch the whole
