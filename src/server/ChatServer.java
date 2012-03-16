@@ -57,7 +57,7 @@ public class ChatServer implements ChatServerInterface {
 		System.out.println("Client joined the room " + roomName + " : " + client.toString());
 		registeredClients.add(client);
 		try {
-			registry.rebind("user_" + client.getName(), client);
+			registry.rebind(client.toString(), client);
 		} catch (AccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

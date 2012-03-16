@@ -140,10 +140,10 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		window.publish(roomName, message);
 	}
 
-	@Override
-	public String getName() {
-		return userName;
-	}
+//	@Override
+//	public String getName() {
+//		return userName;
+//	}
 
 	// This class does not contain a main method. You should launch the whole
 	// program by launching ChatClientWindow's main method.
