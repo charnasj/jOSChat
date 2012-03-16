@@ -48,7 +48,7 @@ public class ChatServer implements ChatServerInterface {
 			try {
 				c.receiveMsg(roomName, publisher + " : " + message);
 			} catch (RemoteException e) {
-				e.printStackTrace();
+				registeredClients.remove(c);
 			}
 		}
 	}
