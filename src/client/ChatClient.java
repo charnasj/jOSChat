@@ -46,6 +46,11 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	private Hashtable<String, ChatServerInterface> chatRooms;
 	
 	/**
+	 * Client stub
+	 * */
+	private CommandsFromServer stub;
+	
+	/**
 	 * Constructor for the ChatClient. Must perform the connection to the
 	 * server. If the connection is not successful, it must exit with an error.
 	 * 
@@ -56,6 +61,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		this.userName = userName;
 		chatRooms = new Hashtable<String, ChatServerInterface>();
 		try {
+			stub = (CommandsFromServer)UnicastRemoteObject.exportObject(this,0);
 			registry = LocateRegistry.getRegistry(serverLookUpName, 1099);
 			server = (ChatServerManagerInterface) registry.lookup("server");
 		} catch (RemoteException e) {
@@ -99,7 +105,6 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		try {
 			ChatServerInterface chatServer = (ChatServerInterface) registry
 					.lookup("room_" + roomName);
-			CommandsFromServer stub = (CommandsFromServer)UnicastRemoteObject.exportObject(this,0);
 			chatServer.register(stub);
 			chatRooms.put(roomName, chatServer);
 			System.out.println("Joined room: " + roomName);
