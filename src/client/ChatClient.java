@@ -60,7 +60,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 			server = (ChatServerManagerInterface) registry.lookup("server");
 			CommandsFromServer stub = (CommandsFromServer) UnicastRemoteObject
 					.exportObject(this, 0);
-//			registry.rebind("user_" + userName, stub);
+			registry.rebind("user_" + userName, stub);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
@@ -104,7 +104,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 					.lookup("room_" + roomName);
 			chatRooms.put(roomName, chatServer);
 			
-			chatServer.register((CommandsFromServer) registry.lookup("user_" + userName));
+//			chatServer.register((CommandsFromServer) registry.lookup("user_" + userName));
 			System.out.println("Joined room: " + roomName);
 			return true;
 		} catch (Exception e) {

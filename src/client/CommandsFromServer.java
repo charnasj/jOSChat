@@ -22,7 +22,7 @@ public interface CommandsFromServer extends Remote {
 	//i.e. when Server call this receiveMsg method ChatClient call publish method of it's window to display this message
 	public void receiveMsg(String roomName, String message) throws RemoteException;
 
-	public String getName();
+	public String getName() throws RemoteException;
 }
 
 
