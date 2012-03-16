@@ -26,14 +26,19 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	private final CommandsToWindow window;
 
 	/**
-	 * The RMI registry
+	 * The server RMI registry
 	 */
 	private Registry registry;
 
 	/**
+	 * The local RMI registry.
+	 */
+	private Registry localRegistry;
+	
+	/**
 	 * The server name.
 	 * */
-	 private final String serverLookUpName = "130.125.11.213";
+	 private final String serverLookUpName = "130.125.12.229";
 
 	/**
 	 * The server remote interface.
@@ -57,10 +62,11 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		chatRooms = new Hashtable<String, ChatServerInterface>();
 		try {
 			registry = LocateRegistry.getRegistry(serverLookUpName);
+			localRegistry = LocateRegistry.getRegistry("localhost");
 			server = (ChatServerManagerInterface) registry.lookup("server");
 			CommandsFromServer stub = (CommandsFromServer) UnicastRemoteObject
 					.exportObject(this, 0);
-			registry.rebind("user_" + userName, stub);
+			localRegistry.rebind("user_" + userName, stub);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
@@ -146,7 +152,4 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	// This class does not contain a main method. You should launch the whole
 	// program by launching ChatClientWindow's main method.
 
-//	public static void main(String[] args) {
-//		new ChatClient(null, "test");
-//	}
 }

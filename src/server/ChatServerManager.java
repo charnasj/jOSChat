@@ -67,7 +67,7 @@ public class ChatServerManager implements ChatServerManagerInterface{
 		// TODO main method needs to be done.
 		try {
 			System.setProperty("java.security.policy", "security");
-			System.setProperty("java.rmi.server.hostname", "130.125.12.229:1099");
+			System.setProperty("java.rmi.server.hostname", "130.125.12.229");
 			if (System.getSecurityManager() == null) {
 				System.setSecurityManager(new RMISecurityManager());
 			}
