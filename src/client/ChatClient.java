@@ -60,15 +60,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		this.window = window;
 		this.userName = userName;
 		chatRooms = new Hashtable<String, ChatServerInterface>();
-		try {
-			stub = (CommandsFromServer)UnicastRemoteObject.exportObject(this,0);
-			registry = LocateRegistry.getRegistry(serverLookUpName );
-			server = (ChatServerManagerInterface) registry.lookup("ChatServerManager");
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotBoundException e) {
-			e.printStackTrace();
-		}
+		lookupNewChatServerManager();
 
 	}
 
@@ -96,9 +88,24 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 			ret = server.getRoomsList();
 			return ret;
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			lookupNewChatServerManager();
+			getChatRoomsList();
 		}
 		return null;
+	}
+
+	private void lookupNewChatServerManager() {
+		try {
+			if (stub == null) {
+				stub = (CommandsFromServer)UnicastRemoteObject.exportObject(this,0);
+			}
+			registry = LocateRegistry.getRegistry(serverLookUpName );
+			server = (ChatServerManagerInterface) registry.lookup("ChatServerManager");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean joinChatRoom(String roomName) {
@@ -109,10 +116,19 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 			chatRooms.put(roomName, chatServer);
 			System.out.println("Joined room: " + roomName);
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (RemoteException e) {
+			waitForChatServer();
+			joinChatRoom(roomName);
+			return false;
+		} catch (NotBoundException e) {
 			return false;
 		}
+	}
+
+	public void waitForChatServer() {
+		try {
+			wait(2);
+		} catch (InterruptedException e1) {	}
 	}
 
 	public boolean leaveChatRoom(String roomName) {
@@ -122,7 +138,8 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 			chatRooms.remove(roomName);
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			waitForChatServer();
+			leaveChatRoom(roomName);
 			return false;
 		}
 	}
@@ -131,7 +148,8 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		try {
 			return server.createRoom(roomName);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			lookupNewChatServerManager();
+			createNewRoom(roomName);
 			return false;
 		}
 	}

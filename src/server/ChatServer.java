@@ -52,9 +52,7 @@ public class ChatServer implements ChatServerInterface {
 				toRemVector.add(c);
 			}
 		}
-		for(CommandsFromServer c : toRemVector) {
-			registeredClients.remove(c);
-		}
+		registeredClients.removeAll(toRemVector);
 	}
 
 	public void register(CommandsFromServer client) {
@@ -63,10 +61,8 @@ public class ChatServer implements ChatServerInterface {
 		try {
 			registry.rebind(client.toString(), client);
 		} catch (AccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
