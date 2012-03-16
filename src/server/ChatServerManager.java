@@ -39,7 +39,7 @@ public class ChatServerManager implements ChatServerManagerInterface{
 		try {
 			ChatServerManagerInterface stub = (ChatServerManagerInterface)UnicastRemoteObject.exportObject(this,0);
 			registry = LocateRegistry.getRegistry();
-			registry.rebind("server", stub);
+			registry.rebind("ChatServerManager", stub);
 		} catch (AccessException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
