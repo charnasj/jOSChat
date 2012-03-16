@@ -33,7 +33,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	/**
 	 * The server name.
 	 * */
-	// private final String serverLookUpName = "localhost";
+	 private final String serverLookUpName = "130.125.11.213";
 
 	/**
 	 * The server remote interface.
@@ -56,7 +56,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		this.userName = userName;
 		chatRooms = new Hashtable<String, ChatServerInterface>();
 		try {
-			registry = LocateRegistry.getRegistry();
+			registry = LocateRegistry.getRegistry(serverLookUpName);
 			server = (ChatServerManagerInterface) registry.lookup("server");
 			CommandsFromServer stub = (CommandsFromServer) UnicastRemoteObject
 					.exportObject(this, 0);
