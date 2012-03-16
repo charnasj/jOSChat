@@ -32,7 +32,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	/**
 	 * The server name.
 	 * */
-	 private final String serverLookUpName = "130.125.12.229";
+	 private final String serverLookUpName = "130.125.12.179";
 
 	/**
 	 * The server remote interface.
