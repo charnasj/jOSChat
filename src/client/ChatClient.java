@@ -62,7 +62,7 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		chatRooms = new Hashtable<String, ChatServerInterface>();
 		try {
 			stub = (CommandsFromServer)UnicastRemoteObject.exportObject(this,0);
-			registry = LocateRegistry.getRegistry(serverLookUpName, 1099);
+			registry = LocateRegistry.getRegistry(serverLookUpName );
 			server = (ChatServerManagerInterface) registry.lookup("server");
 		} catch (RemoteException e) {
 			e.printStackTrace();

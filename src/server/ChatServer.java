@@ -44,12 +44,16 @@ public class ChatServer implements ChatServerInterface {
 	
 	public void publish(String message, String publisher) {
 		System.out.println("Message received from: " + publisher);
+		Vector<CommandsFromServer> toRemVector = new Vector<CommandsFromServer>();
 		for(CommandsFromServer c : registeredClients) {
 			try {
 				c.receiveMsg(roomName, publisher + " : " + message);
 			} catch (RemoteException e) {
-				registeredClients.remove(c);
+				toRemVector.add(c);
 			}
+		}
+		for(CommandsFromServer c : toRemVector) {
+			registeredClients.remove(c);
 		}
 	}
 
