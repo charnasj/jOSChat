@@ -1,5 +1,7 @@
 package client;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -29,16 +31,11 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 	 * The server RMI registry
 	 */
 	private Registry registry;
-
-	/**
-	 * The local RMI registry.
-	 */
-	private Registry localRegistry;
 	
 	/**
 	 * The server name.
 	 * */
-	 private final String serverLookUpName = "130.125.12.229";
+	 private final String serverLookUpName = "130.125.12.229";;
 
 	/**
 	 * The server remote interface.
@@ -61,16 +58,11 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		this.userName = userName;
 		chatRooms = new Hashtable<String, ChatServerInterface>();
 		try {
-			registry = LocateRegistry.getRegistry(serverLookUpName);
-			try {
-				localRegistry = LocateRegistry.createRegistry(1099);
-			} catch (Exception e) {
-				localRegistry = LocateRegistry.getRegistry();
-			}
+			registry = LocateRegistry.getRegistry(serverLookUpName, 1099);
 			server = (ChatServerManagerInterface) registry.lookup("server");
 			CommandsFromServer stub = (CommandsFromServer) UnicastRemoteObject
 					.exportObject(this, 0);
-			localRegistry.rebind("user_" + userName, stub);
+			registry.rebind("user_" + userName, stub);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
