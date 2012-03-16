@@ -4,6 +4,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -98,8 +99,9 @@ public class ChatClient implements CommandsFromWindow, CommandsFromServer {
 		try {
 			ChatServerInterface chatServer = (ChatServerInterface) registry
 					.lookup("room_" + roomName);
+			CommandsFromServer stub = (CommandsFromServer)UnicastRemoteObject.exportObject(this,0);
+			chatServer.register(stub);
 			chatRooms.put(roomName, chatServer);
-			
 			System.out.println("Joined room: " + roomName);
 			return true;
 		} catch (Exception e) {
